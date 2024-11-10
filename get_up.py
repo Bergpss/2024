@@ -152,9 +152,10 @@ def main(
     repo = u.get_repo(repo_name)
     issue = repo.get_issue(GET_UP_ISSUE_NUMBER)
     is_today = get_today_get_up_status(issue)
-    if is_today:
-        print("Today I have recorded the wake up time")
-        return
+    # For test, do not check today.
+    # if is_today:
+    #     print("Today I have recorded the wake up time")
+    #     return
     # yesterday_question = get_yesterday_question()
     # sentence, is_get_up_early, images_list = make_get_up_message()
     sentence, is_get_up_early = make_get_up_message()
