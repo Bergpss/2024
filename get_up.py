@@ -6,14 +6,15 @@ import time
 
 import pendulum
 import requests
-import telebot
-from telebot.types import InputMediaPhoto, InputMediaVideo
+# import telebot
+# from telebot.types import InputMediaPhoto, InputMediaVideo
 from github import Github
-from openai import OpenAI
-from kling import VideoGen, ImageGen
+# from openai import OpenAI
+# from kling import VideoGen, ImageGen
 
-# 1 real get up #5 for test
+# 1 real get up #4 for test
 GET_UP_ISSUE_NUMBER = 1
+TEST_ISSUE_NUMBER = 4
 GET_UP_MESSAGE_TEMPLATE = "今天的起床时间是--{get_up_time}.\r\n\r\n起床啦。\r\n\r\n今天的一句诗:\r\n{sentence}\r\n"
 # in 2024-06-15 this one ssl error
 SENTENCE_API = "https://v1.jinrishici.com/all"
@@ -103,10 +104,9 @@ def make_pic_and_save(sentence):
 def make_get_up_message():
     sentence = get_one_sentence()
     now = pendulum.now(TIMEZONE)
-    # 3 - 7 means early for me
+    # 5 - 7 means early for me
     ###  make it to 9 in 2024.10.15 for maybe I forgot it ###
-    # Berg: 0 for test
-    is_get_up_early = 0 <= now.hour <= 9
+    is_get_up_early = 5 <= now.hour <= 9
     # Berg: Do not gen images now.
     # try:
     #     images_list = make_pic_and_save(sentence)
@@ -145,17 +145,17 @@ def main(
     github_token,
     repo_name,
     weather_message,
-    tele_token,
-    tele_chat_id,
+    berg_daily_word,
+    # tele_token,
+    # tele_chat_id,
 ):
     u = login(github_token)
     repo = u.get_repo(repo_name)
-    issue = repo.get_issue(GET_UP_ISSUE_NUMBER)
+    issue = repo.get_issue(TEST_ISSUE_NUMBER)
     is_today = get_today_get_up_status(issue)
-    # For test, do not check today.
-    # if is_today:
-    #     print("Today I have recorded the wake up time")
-    #     return
+    if is_today:
+        print("Today I have recorded the wake up time")
+        return
     # yesterday_question = get_yesterday_question()
     # sentence, is_get_up_early, images_list = make_get_up_message()
     sentence, is_get_up_early = make_get_up_message()
@@ -165,6 +165,9 @@ def main(
     if weather_message:
         weather_message = f"现在的天气是{weather_message}\n"
         body = weather_message + early_message
+    if berg_daily_word:
+        berg_daily_word = f"起床后的想法是：{berg_daily_word}\n"
+        body = body + berg_daily_word
     # body = body + f"\n\n关于昨天的问题？\n{yesterday_question}"
     if is_get_up_early:
         # comment = body + f"![image]({images_list[0]})"
@@ -196,17 +199,22 @@ if __name__ == "__main__":
     parser.add_argument(
         "--weather_message", help="weather_message", nargs="?", default="", const=""
     )
+    # add daily word
     parser.add_argument(
-        "--tele_token", help="tele_token", nargs="?", default="", const=""
+        "--berg_daily_word", help="berg_daily_word", nargs="?", default="", const=""
     )
-    parser.add_argument(
-        "--tele_chat_id", help="tele_chat_id", nargs="?", default="", const=""
-    )
+    # parser.add_argument(
+    #     "--tele_token", help="tele_token", nargs="?", default="", const=""
+    # )
+    # parser.add_argument(
+    #     "--tele_chat_id", help="tele_chat_id", nargs="?", default="", const=""
+    # )
     options = parser.parse_args()
     main(
         options.github_token,
         options.repo_name,
         options.weather_message,
-        options.tele_token,
-        options.tele_chat_id,
+        options.berg_daily_word,
+        # options.tele_token,
+        # options.tele_chat_id,
     )
