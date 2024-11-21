@@ -11,7 +11,7 @@ on:
         required: false
       
 
-env:
+# env:
   # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   # KLING_COOKIE: ${{ secrets.KLING_COOKIE }}
   # OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
