@@ -24,12 +24,12 @@ DEFAULT_SENTENCE = (
 )
 TIMEZONE = "Asia/Shanghai"
 YESTERDAY_QUESTION = "问我关于我昨天过的怎么样的五个问题。请不要包含这些问题：{questions}, 并只返回问题。"
-if api_base := os.environ.get("OPENAI_API_BASE"):
-    client = OpenAI(base_url=api_base, api_key=os.environ.get("OPENAI_API_KEY"))
-else:
-    client = OpenAI()
+# if api_base := os.environ.get("OPENAI_API_BASE"):
+#     client = OpenAI(base_url=api_base, api_key=os.environ.get("OPENAI_API_KEY"))
+# else:
+#     client = OpenAI()
 
-KLING_COOKIE = os.environ.get("KLING_COOKIE")
+# KLING_COOKIE = os.environ.get("KLING_COOKIE")
 
 
 def get_all_til_knowledge_file():
